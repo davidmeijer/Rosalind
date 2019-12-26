@@ -1,0 +1,5 @@
+/Users/david/GitHub/Rosalind/DNA/DNA/bin/Debug/DNA.exe
+/Users/david/GitHub/Rosalind/DNA/DNA/bin/Debug/DNA.pdb
+/Users/david/GitHub/Rosalind/DNA/DNA/obj/Debug/DNA.csprojAssemblyReference.cache
+/Users/david/GitHub/Rosalind/DNA/DNA/obj/Debug/DNA.exe
+/Users/david/GitHub/Rosalind/DNA/DNA/obj/Debug/DNA.pdb
