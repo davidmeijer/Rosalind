@@ -4,14 +4,16 @@ Author: David Meijer
 Rosalind exercise: LCSQ
 http://rosalind.info/problems/lcsq/
 """
+# Imports:
+import sys
 import argparse
-import itertools
 import random
 import pandas
-import sys
 
+# Global variables:
 sys.setrecursionlimit(1500)
 
+# Classes and functions:
 def define_arguments():
     """
     Defines possible command line arguments.
@@ -22,145 +24,126 @@ def define_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
+
     return parser
 
-def parse_rosalind_input(fn):
+def parse_fasta(fn):
     """
     Parses Rosalind input.
 
     Args:
         fn (str): file name of Rosalind input file.
+        
+    Returns:
+        fasta_dict (dict): contains sequenses as {header:sequence,...}.
     """
     fasta_dict = {}
+    
     with open(fn) as fo:
         for line in [line.strip() for line in fo]:
             if line.startswith('>'):
                 header = line
-                fasta_dict[header] = []
+                fasta_dict[header] = ''
             else:
-                fasta_dict[header].append(line)
-    fasta_dict.update(
-        (header, ''.join(seq)) for header, seq in fasta_dict.items())
+                fasta_dict[header] += line
+
     return fasta_dict
 
-def get_subseqs(dna):
+def random_string(slen, char_set='ACTG'):
     """
-    Creates different ascending subseqs from DNA seq.
-
+    Generate a random string of fixed length. 
+    
+    Default: DNA.
+    
     Args:
-        dna (str): DNA sequence.
-
+        slen (int): length of random string.
+        char_set (str): char to choose from for random string.
+        
     Returns:
-        subseqs (list): list of sub DNA seqs from input seq.
+        rstring (str): random string of length slen.
     """
-    subseqs = [dna] # For if the two seqs are identical they match in full length.
-    n = [i+1 for i in range(len(dna))]
-    for subset in range(len(dna)):
-        for lst in [list(j) for j in
-                    [x for x in itertools.permutations(n, subset+1)]]:
-            if order(lst):
-                # Now you know which bases to omit, construct subseqs:
-                subseq = []
-                for i,base in enumerate(dna):
-                    if i+1 not in lst:
-                        subseq.append(base)
-                subseqs.append(''.join(subseq))
-    return list(set(subseqs))
-
-def randomString(stringLength):
-    """Generate a random string of fixed length """
-    bases = 'ACTG'
-    return ''.join(random.choice(bases) for i in range(stringLength))
-
-def traceback(df, loc, route=[]):
-    """"""
-
+    rstring = ''.join(random.choice(char_set) for i in range(slen))
+    
+    return rstring
+    
+def compute_lcs(A, B):
     """
-    x = df.at[loc[0]-1,loc[1]-1]
-    y = df.at[loc[0]-1,loc[1]]
-    z = df.at[loc[0],loc[1]-1]
-    c = df.at[loc[0], loc[1]]
-
-    #print(loc, x, y, z, route)
-
-    #if loc == (1,1):
-    if x == 0 and y == 0 and z == 0:
-        route.append(loc[1])
-        return route
-
-    if x == y and x == z and x == c:
-        return traceback(df, (loc[0]-1,loc[1]-1), route)
-
-    if x == y and x == z and c > x:
-        route.append(loc[1])
-        return traceback(df, (loc[0]-1,loc[1]-1), route)
-
-    if y > z:
-        return traceback(df, (loc[0]-1,loc[1]), route)
-
-    if z > y:
-        return traceback(df, (loc[0],loc[1]-1), route)
-
-    # At intersections you can go in two ways, I just picked one which
-    # was not the longest...
-    #if z == y and x < z:
-    #    return traceback(df, (loc[0],loc[1]-1), route)
-
-    if z == y and x < z:
-        return traceback(df, (loc[0]-1,loc[1]), route)
+    Computes Longest Common Subsequences between strings A and B.
+    
+    Args:
+        A (str): string A.
+        B (str): string B.
+        
+    Returns:
+        X (arr): matrix containing LCS paths for strings A and B.
     """
+    lenA, lenB = len(A), len(B)
+    
+    # Create matrix of zeros with dimensions lenA (col), lenB (row):
+    X = [[0 for i in range(lenA + 1)] for j in range(lenB + 1)] 
+    # lenA/lenB + 1 is for inserting a zero column and row!
+    
+    # Populate X with scores for calculating LCS:
+    for i in range(lenA):
+        for j in range(lenB):
+            if A[i] == B[j]:
+                # +1 if two nucleotides are the same (diagonal):
+                X[j + 1][i + 1] = X[j][i] + 1
+            else:
+                # If not the same, get highest value from top/left:
+                X[j + 1][i + 1] = max(X[j + 1][i], X[j][i + 1])
+                
+    return X
+
+def backtrack_lcs(matrix, A, B, i, j):
+    """
+    Reads out all routes (LCSs) from LCS matrix.
+    
+    Args:
+        matrix (list of lists): containing LCSs.
+        A (str): string A.
+        B (str): string B.
+        i (int): location in A.
+        j (int): location in B.
+    
+    Returns:
+        lcs (str): longest common substring from matrix.
+    """
+    # Return LCS when begin of one of the strings is reached:
+    if i == 0 or j == 0:
+        return ""
+    
+    # If equal return char:
+    if A[i - 1] ==  B[j - 1]:
+        return backtrack_lcs(matrix, A, B, i - 1, j - 1) + A[i - 1]
+        
+    # Choose left over top if larger, otherwise (equal) choose top:
+    if matrix[j][i - 1] > matrix[j - 1][i]:
+        return backtrack_lcs(matrix, A, B, i - 1, j)
+    
+    return backtrack_lcs(matrix, A, B, i, j - 1)
 
 def main():
     """
     Main code.
     """
     args = define_arguments().parse_args()
-    fasta_input = parse_rosalind_input(args.input)
+    fasta = parse_fasta(args.input)
+    
+    # Get the two sequences from the FASTA dictionary:
+    seq1 = fasta[[key for key in fasta.keys()][0]]
+    seq2 = fasta[[key for key in fasta.keys()][1]]
+    
+    # Compute LCS matrix for two strings:
+    LCS_matrix = compute_lcs(seq1, seq2)
+    
+    # Get max LCS length from matrix:
+    #print(max([max(x) for x in LCS_matrix]))
 
-    seqs = [fasta_input.get([*fasta_input][i]) for i in range(len(fasta_input))]
+    # Read out all LCSs from LCS matrix:
+    LCS = backtrack_lcs(LCS_matrix, seq1, seq2, len(seq1), len(seq2))
+    print(LCS)
 
-    #s = seqs[0]
-    #t = seqs[1]
-
-    #s = 'AGCAT'
-    #t = 'GAC'
-
-    s = 'TTTTTAAAAA'
-    t = 'AAAAATTTTT'
-
-    #s = randomString(1000)
-    #t = randomString(1000)
-
-    #print(len(s), len(t))
-
-    df = pandas.DataFrame(columns=[0] + [x+1 for x in range(len(s))],
-                          index=[0] + [x+1 for x in range(len(t))])
-    df.iloc[0] = [0]; df[0]= 0
-
-    for i,row in enumerate(df.index):
-        if row == 0:
-            pass
-        else:
-            for j,column in enumerate(df):
-                if column == 0:
-                    pass
-                else:
-                    x = max([df.at[i,j-1],df.at[i-1,j]])
-                    if df.at[i,j-1] == df.at[i-1,j]:
-                        if s[j-1] == t[i-1]:
-                            x += 1
-                    df.at[i,j] = x
-
-    print(df)
-
-    start = (df.shape[0]-1, df.shape[1]-1)
-    route = traceback(df, start)
-
-    print(route)
-    #print(df)
-    lcs = ''.join([s[loc-1] for loc in route][::-1])
-    print(lcs)
-    print(len(lcs))
-
+# Main code:
 if __name__ == '__main__':
     main()
