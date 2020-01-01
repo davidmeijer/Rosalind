@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
 Author: David Meijer
-Assignment: Read Filtration by Quality
-http://rosalind.info/problems/filt/
+Assignment: Base Quality Distribution
+http://rosalind.info/problems/bphr/
 """
 # Imports:
 import argparse
-import subprocess
 from Bio import SeqIO
+import statistics as stat
 
 # Classes and functions:
 def define_arguments():
@@ -22,7 +22,7 @@ def define_arguments():
                         help='Rosalind input file.')
                         
     return parser
-    
+
 def parse_assignment_input(fn):
     """
     Parses assignment specific input.
@@ -32,12 +32,11 @@ def parse_assignment_input(fn):
         
     Returns:
         q (int): quality threshold value.
-        p (int): percentage of bases.
         fn_fq (str): file name of FASTQ entries.
     """
     with open(fn, 'r') as fn_fo:
         # Get thresholds from input file:
-        q, p = map(int, fn_fo.readline().strip().split())
+        q = int(fn_fo.readline().strip())
         
         # Create new file with only FASTQ format sequences:
         fn_fq = ''.join(fn.rsplit('.', 1)[:-1]) + '.fq'
@@ -45,33 +44,43 @@ def parse_assignment_input(fn):
             for line in fn_fo:
                 fn_fq_fo.write(line)
     
-    return q, p, fn_fq
-    
-def fastx_quality_filter(fn, q, p, fn_out):
-    """
-    Runs FASTX Quality Filter on FASTQ file.
-    
-    Args:
-        fn (str): file name of FASTQ entries.
-        q (int): quality threshold value.
-        p (int): percentage of bases.
-    """
-    cmd = ('fastq_quality_filter -q {0} -p {1} -i {2} -o {3}')\
-           .format(q, p, fn, fn_out)
-    subprocess.run(cmd, shell=True, check=True)
-    
-    return fn_out
-    
+    return q, fn_fq
+
 # Main code:
 def main():
     """
     Main code.
     """
     args = define_arguments().parse_args()
-    q, p, fn_fq = parse_assignment_input(args.input)
-    fn_out = ''.join(fn_fq.rsplit('.', 1)[:-1]) + '.out'
-    fn_out = fastx_quality_filter(fn_fq, q, p, fn_out)
-    print(len([record for record in SeqIO.parse(fn_out, 'fastq')]))
+    q, fn_fq = parse_assignment_input(args.input)
+    
+    count = 0
+    scores = [record.letter_annotations['phred_quality'] \
+              for record in SeqIO.parse(fn_fq, 'fastq')]
+    for nucl_scores in zip(*scores):
+        if stat.mean(nucl_scores) < q:
+            count += 1
+    print(count)
+    """
+    # Group all records together with same header:
+    record_dict = {}
+    for record in SeqIO.parse(fn_fq, 'fastq'):
+        header = record.id
+        phred = record.letter_annotations['phred_quality']
+        if not header in record_dict:
+            record_dict[header] = [phred]
+        else:
+            record_dict[header].append(phred)
+            
+    # Calculate if mean quality score exceeds threshold:
+    count = 0
+    for header,scores in record_dict.items():
+        for nucl_scores in zip(*scores):
+            if stat.mean(nucl_scores) < q:
+                count += 1
+                
+    print(count)
+    """
     
 if __name__ == '__main__':
     main()

@@ -7,7 +7,6 @@ http://rosalind.info/problems/tfsq/
 # Imports:
 import argparse
 import subprocess
-from Bio import SeqIO
 
 # Classes and functions:
 def define_arguments():
