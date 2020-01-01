@@ -6,6 +6,7 @@ http://rosalind.info/problems/tfsq/
 """
 # Imports:
 import argparse
+import subprocess
 
 # Classes and functions:
 def define_arguments():
@@ -50,6 +51,10 @@ def fastq_to_fasta(fn_in,
                 pass
             if entry_count == 4:
                 entry_count = 0
+                
+    if del_old:
+        cmd = 'rm {0}'.format(fn_in)
+        subprocess.run(cmd, shell=True, check=True)
 
 # Main code:
 def main():
