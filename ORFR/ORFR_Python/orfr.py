@@ -38,7 +38,7 @@ def main():
     comp = seq.complement()
     revcomp = seq.reverse_complement()
     
-    # Messe code from here onwards, clean up later:
+    # Messe code from here onwardss, clean up later:
     pps = []
     for i in range(3):
         for seq in [comp, revcomp]:
