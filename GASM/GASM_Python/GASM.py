@@ -90,7 +90,7 @@ def main():
             
             superstring = make_superstring(adjl)
     
-            #print(superstring)
+            print(superstring)
             
             print('kmer size {0} cycles'.format(i))
             
@@ -98,7 +98,8 @@ def main():
             
         except:
             print('kmer size {0} does not cycle'.format(i))
-            
+    
+    exit()
     with open('out_gasm.txt', 'w') as fo:
         fo.write(superstring)
     
