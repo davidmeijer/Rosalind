@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: Suboptimal Local Alignment
-http://rosalind.info/problems/subo/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 import subprocess
 
-
-# Classes and functions:
 def define_arguments():
-    """
-    Defines possible command line arguments.
+    """Defines possible command line arguments.
     
     Returns:
-        parser (obj): defines command line arguments.
-    """
+        parser (obj): defines command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
@@ -24,15 +16,13 @@ def define_arguments():
     return parser
     
 def parse_fasta(fn):
-    """
-    Parses input fasta file in dictionary with {header:seq,...}.
+    """Parses input fasta file in dictionary with {header:seq,...}.
     
     Args:
         fn (str): name of input file in FASTA format.
     
     Returns:
-        fasta_dict (dict): parsed FASTA file as {header:seq,...}.
-    """
+        fasta_dict (dict): parsed FASTA file as {header:seq,...}."""
     fasta_dict = {}
     
     with open(fn, 'r') as fo:
@@ -46,16 +36,14 @@ def parse_fasta(fn):
     return fasta_dict
     
 def run_lalign(fn1, fn2, outfn='out.txt'):
-    """
-    Run LALIGN on two sequences to find inexact repeat r (100% match).
+    """Run LALIGN on two sequences to find inexact repeat r (100% match).
     
     Args:
         fn1 (str): FASTA file with one sequence.
         fn2 (str): FASTA file with one sequence.
         
     Returns:
-        outfn (str): file name of output file of LALIGN.
-    """
+        outfn (str): file name of output file of LALIGN."""
     cmd = ('lalign36 -d 1 -f 8 -g 8 -m 3 ' +
            '-O {0} {1} {2}').format(outfn, fn1, fn2)
     subprocess.run(cmd, shell=True, check=True)
@@ -63,15 +51,13 @@ def run_lalign(fn1, fn2, outfn='out.txt'):
     return outfn
     
 def parse_lalign(fn):
-    """
-    Retrieves 100.0% match from LALIGN alignment output file.
+    """Retrieves 100.0% match from LALIGN alignment output file.
     
     Args:
         fn (str): file name LALIGN alignment output file.
         
     Returns:
-        r (str): inexact repeat from input sequences.
-    """
+        r (str): inexact repeat from input sequences."""
     r = ''
     
     line_count = 0
@@ -105,16 +91,14 @@ def hamming(seq1, seq2):
 	return hamm
     
 def count_hamming(r, seq, max_hamm=3):
-    """
-    Count number of matches within dist mismatches.
+    """Count number of matches within dist mismatches.
     
     Args:
         r (str): inexact repeat from input sequences.
         seq (str): sequence to match r against.
         diost (int):
     Returns:
-        count (int):
-    """
+        count (int):"""
     count = 0
     for i in range(len(seq) - len(r) + 1):
         if hamming(seq[i:i + len(r)], r) <= max_hamm:
@@ -122,16 +106,10 @@ def count_hamming(r, seq, max_hamm=3):
             
     return count
     
-# Main code:
 def main():
-    """
-    Main code.
-    """
-    # Define input:
     args = define_arguments().parse_args()
     fn = args.input
     
-    # Parse input file:
     fasta_dict = parse_fasta(fn)
     
     fns = []

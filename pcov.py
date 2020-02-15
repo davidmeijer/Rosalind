@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Genome Assembly with Perfect Coverage
-"""
+"""Author: David Meijer"""
+
 import argparse
 import numpy as np
 
 def define_arguments():
-    """Defines possible command line arguments.
-    
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help = 'Rosalind input file.')
@@ -23,9 +19,7 @@ def make_superstring(adjl):
         adjl (set): De Bruijn edge adjacency set.
         
     Returns:   
-        superstring (str): superstring made from adjacency list.
-    
-    """
+        superstring (str): superstring made from adjacency list."""
     superstring = []
     
     adjg = dict(adjl)
@@ -38,9 +32,7 @@ def make_superstring(adjl):
     return ''.join(superstring)
 
 def main():
-    """Main code.
-    
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     
     with open(args.input, 'r') as fo:

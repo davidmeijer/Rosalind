@@ -1,18 +1,11 @@
 #!/usr/bin/env python3
-"""
+"""Author: David Meijer"""
 
-Author: David Meijer
-
-Rosalind exercise: Enumerating k-mers Lexicographically.
-
-"""
 import argparse
 import itertools
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -29,9 +22,7 @@ def parse_rosalind_input(path_to_input):
     Returns:
         alphabet (list): containing ordered symbols.
         n (int): positive integer defining string length for strings
-        that can be formed from the alphabet.
-
-    """
+        that can be formed from the alphabet."""
     with open(path_to_input, 'r') as in_fo:
         alphabet =  in_fo.readline().strip().split(' ')
         n = int(in_fo.readline().strip())
@@ -44,11 +35,7 @@ def get_permutations(elem_list, n):
     Args:
         elem_list (list): list of lexicographically ordered items.
         n (int): positive integer defining string length for strings
-        that can be formed from the alphabet.
-
-    Returns:
-
-    """
+        that can be formed from the alphabet."""
     elem_list_permutations = []
 
     for perm_tup in itertools.permutations(elem_list, n):
@@ -57,9 +44,7 @@ def get_permutations(elem_list, n):
     return list(set(elem_list_permutations))
 
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     alphabet, n = parse_rosalind_input(args.input)
 

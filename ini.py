@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: Introduction to the Bioinformatics Armory
-http://rosalind.info/problems/ini/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 from Bio.Seq import Seq
 
-# Classes and functions:
 def define_arguments():
-	"""
-	Defines possible command line arguments.
+	"""Defines possible command line arguments.
 
 	Returns:
-		parser (obj): contains user input command line arguments.
-	"""
+		parser (obj): contains user input command line arguments."""
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-input', type=str, required=True,
 						help='Rosalind input file.')
@@ -23,9 +16,7 @@ def define_arguments():
 	return parser
 
 def main():
-	"""
-	Main code.
-	"""
+	"""Main code."""
 	args = define_arguments().parse_args()
 	
 	with open(args.input, 'r') as fo:

@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
-"""
+"""Author: David Meijer"""
 
-Author: David Meijer
-
-Rosalind exercise: Calculating Expected Offspring.
-
-"""
 import argparse
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -32,9 +25,7 @@ def parse_rosalind_input(path_to_input):
         Aa_Aa (int): number of couples with this genotype;
         Aa_aa (int): number of couples with this genotype;
         aa_aa (int): number of couples with this genotype as a list in
-        the same order.
-
-    """
+        the same order."""
     with open(path_to_input, 'r') as in_fo:
         values = [int(x) for x in in_fo.readline().strip().split()]
 
@@ -56,9 +47,7 @@ def determine_dominant_phenotype(values, offspring=2):
 
     Returns:
         exp_offspring (float): expected number of offspring displaying
-        dominant phenotype.
-
-    """
+        dominant phenotype."""
     exp_offspring = []
 
     # AA-AA:
@@ -88,9 +77,7 @@ def determine_dominant_phenotype(values, offspring=2):
     return sum(exp_offspring)
 
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     values = parse_rosalind_input(args.input)
 

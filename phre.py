@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: Read Quality Distribution
-http://rosalind.info/problems/phre/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 from Bio import SeqIO
 
-# Classes and functions:
 def define_arguments():
-    """
-    Defines possible command line arguments.
+    """Defines possible command line arguments.
     
     Returns:
-        parser (obj): command line arguments.
-    """
+        parser (obj): command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
@@ -23,12 +16,10 @@ def define_arguments():
     return parser
     
 def parse_assignment_input(fn):
-    """
-    Parses assignment specific input.
+    """Parses assignment specific input.
     
     Args:
-        fn (str): file name of Rosalind input file.
-    """
+        fn (str): file name of Rosalind input file."""
     with open(fn, 'r') as fn_fo:
         # Get threshold from input file:
         threshold = int(fn_fo.readline().strip())
@@ -41,11 +32,7 @@ def parse_assignment_input(fn):
     
     return threshold, fn_fq
     
-# Main code:
 def main():
-    """
-    Main code.
-    """
     args = define_arguments().parse_args()
     threshold, fn_fq = parse_assignment_input(args.input)
     count = 0

@@ -1,34 +1,29 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: CORR
-http://rosalind.info/problems/corr/
-"""
+"""Author: David Meijer"""
+
 import argparse
 import copy
 
 def define_arguments():
-    """
-    Defines possible command line arguments.
+    """Defines possible command line arguments.
 
     Returns:
-        parser (object): contains command line arguments.
-    """
+        parser (object): contains command line arguments."""
     parser = argparse.ArgumentParser()
+    
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file filename.')
+                        
     return parser
 
 def parse_input(fn):
-    """
-    Parses Rosalind input file for this assignment.
+    """Parses Rosalind input file for this assignment.
 
     Args:
         fn (str): Rosalind input file filename.
 
     Returns:
-        input (dict): input fasta sequences as {header:seq, ...}.
-    """
+        input (dict): input fasta sequences as {header:seq, ...}."""
     input = {}
     with open(fn) as fo:
         for line in [line.strip() for line in fo]:
@@ -38,27 +33,25 @@ def parse_input(fn):
             else:
                 input[header].append(line)
     input.update((header, ''.join(seq)) for header, seq in input.items())
+    
     return input
 
 def revcomp(dna):
-    """
-    Gets reverse complement of DNA strand.
+    """Gets reverse complement of DNA strand.
 
     Args:
         dna (string): DNA sequence.
 
     Returns:
-        revcomp_dna (string): reverse complement of DNA sequence.
-    """
+        revcomp_dna (string): reverse complement of DNA sequence."""
     rev_dna = dna[::-1]
     td = rev_dna.maketrans('ACTG', 'TGAC')
     revcomp_dna = rev_dna.translate(td)
+    
     return revcomp_dna
 
 def main():
-    """
-    Main code.
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     input = parse_input(args.input)
     seqs = [seq for header, seq in input.items()]

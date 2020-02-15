@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Enumerating Oriented Gene Orderings
-"""
+"""Author: David Meijer"""
+
 import argparse
 import itertools
 
 def define_arguments():
-    """Define possible command line arguments.
-
-    """
+    """Define possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Path to Rosalind exercise specific ' +\
@@ -25,9 +21,7 @@ def parse_rosalind_input(path_to_input):
         file.
 
     Returns:
-        pos_integer (int): positive integer n <= 6.
-
-    """
+        pos_integer (int): positive integer n <= 6."""
     with open(path_to_input, 'r') as in_fo:
         pos_integer = int(in_fo.readline().strip())
 
@@ -40,9 +34,7 @@ def get_signed_permutations(pos_integer):
         pos_integer (int): positive integer n <= 6.
 
     Returns:
-        signed_perms (list): list of list as [ [signed_perm], ...].
-
-    """
+        signed_perms (list): list of list as [ [signed_perm], ...]."""
     signed_perms = []
 
     # Get all present numbers part of the signed permutations:
@@ -58,9 +50,6 @@ def get_signed_permutations(pos_integer):
     return signed_perms
 
 def main():
-    """Main code.
-
-    """
     args = define_arguments().parse_args()
     pos_integer = parse_rosalind_input(args.input)
 

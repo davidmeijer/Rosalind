@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Constructing a De Bruijn Graph
-"""
+"""Author: David Meijer"""
+
 import argparse
 import string
 from operator import itemgetter
 
 def define_arguments():
-    """Defines possible command line arguments.
-    
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help = 'Rosalind input file.')
@@ -24,9 +20,7 @@ def revcomp(dna):
         dna (str): DNA string.
         
     Returns:
-        rcdna (str): Reverse complement of DNA string.
-        
-    """
+        rcdna (str): Reverse complement of DNA string."""
     table = dna.maketrans('ACTG', 'TGAC')
 
     rcdna = dna.translate(table)[::-1]
@@ -40,9 +34,7 @@ def DeBruijn_adjacency_list(dnas):
         dnas (list): list of DNA strings.
     
     Returns:
-        DeBruijn (set): set of De Bruijn adjacencies from DNA strings.
-    
-    """
+        DeBruijn (set): set of De Bruijn adjacencies from DNA strings."""
     DeBruijn = set()
     
     dnas += [revcomp(dna) for dna in dnas]
@@ -54,9 +46,7 @@ def DeBruijn_adjacency_list(dnas):
     return sorted(DeBruijn)
     
 def main():
-    """Main code.
-    
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     
     with open(args.input, 'r') as fo:

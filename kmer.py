@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
-"""
+"""Author: David Meijer"""
 
-Author: David Meijer
-
-Rosalind exercise: Enumerating k-mers Lexicographically.
-
-"""
 import argparse
 import itertools
 import re
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -30,9 +23,7 @@ def parse_rosalind_input(path_to_input):
 
     Returns:
         fasta_dict (dict): dictionary containing input DNA fasta
-        sequences.
-
-    """
+        sequences."""
     fasta_dict = {}
 
     with open(path_to_input, 'r') as in_fo:
@@ -60,9 +51,7 @@ def permutate_kmers(seq, kmer_size=4):
 
     Returns:
         permutated_kmers (list): all possible permutations of kmers
-        from sequence of certain kmer size.
-
-    """
+        from sequence of certain kmer size."""
     kmers = []
 
     elem_list = []
@@ -83,7 +72,6 @@ def permutate_kmers(seq, kmer_size=4):
     # Return sorted, unique permutations:
     return sorted(list(set(elem_list_permutations)))
 
-
 def count_kmers(seq, kmers):
     """Count every kmer in seq.
 
@@ -94,9 +82,7 @@ def count_kmers(seq, kmers):
 
     Returns:
         kmer_counts (list): list of integers in same order as kmers
-        counting the number of instances of kmer in sequence.
-
-    """
+        counting the number of instances of kmer in sequence."""
     kmer_count = []
 
     for kmer in kmers:
@@ -107,9 +93,7 @@ def count_kmers(seq, kmers):
     return kmer_count
 
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     fasta_dict = parse_rosalind_input(args.input)
 
@@ -119,7 +103,6 @@ def main():
 
         kmer_count = [str(x) for x in kmer_count]
         print(' '.join(kmer_count))
-
 
 if __name__ == '__main__':
     main()

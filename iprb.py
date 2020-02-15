@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
-"""
+"""Author: David Meijer"""
 
-Author: David Meijer
-
-Rosalind exercise: Mendel's First Law
-
-"""
 import argparse
 
 def define_arguments():
@@ -18,9 +13,7 @@ def define_arguments():
         command line arguments.
 
     Returns:
-        parser (object): parsed command line arguments.
-
-    """
+        parser (object): parsed command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -32,9 +25,7 @@ def parse_rosalind_input(path_to_input):
     Returns:
         k (int): homozygous individuals (AA).
         m (int): heterozygous individuals (Aa).
-        n (int): homozygous recessive individuals (aa).
-
-    """
+        n (int): homozygous recessive individuals (aa)."""
     with open(path_to_input, 'r') as in_fo:
         input = in_fo.readline().strip().split(' ')
         input = [int(x) for x in input]
@@ -53,9 +44,7 @@ def chance_dominance_alelle_presentation(k, m, n):
         n (int): homozygous recessive individuals (aa).
 
     Returns:
-        p (float): chance to display dominant allele. 5 digits.
-
-    """
+        p (float): chance to display dominant allele. 5 digits."""
     p = 0
 
     total = k + m + n
@@ -76,11 +65,8 @@ def chance_dominance_alelle_presentation(k, m, n):
 
     return round(float(p), 5)
 
-
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     k, m, n = parse_rosalind_input(args.input)
     p = chance_dominance_alelle_presentation(k, m, n)

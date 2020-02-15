@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Introduction to Random Strings
-"""
+"""Author: David Meijer"""
+
 import argparse
 import math
 
 def define_arguments():
-    """Define possible command line arguments.
-
-    """
+    """Define possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Specific Rosalind exercise input file '+\
@@ -25,9 +21,7 @@ def parse_rosalind_input(path_to_input):
 
     Returns:
         seq (str): nucleotide sequence.
-        numbers (list): array of numbers (floats).
-
-    """
+        numbers (list): array of numbers (floats)."""
     with open(path_to_input, 'r') as in_fo:
         seq = in_fo.readline().strip()
         numbers = [float(number) for number in in_fo.readline().strip().split()]
@@ -42,9 +36,7 @@ def get_nucleotide_count(seq):
 
     Returns:
         GC_count (int): number of G and C nucleotides in seq.
-        AT_count (int): number of A and T nucleotides in seq.
-
-    """
+        AT_count (int): number of A and T nucleotides in seq."""
     GC_count, AT_count = 0, 0
 
     for nucl in seq:
@@ -77,9 +69,6 @@ def get_log10_probability(GC_count, AT_count, GC_perc):
     return round(log10_probability, 3)
 
 def main():
-    """Main code.
-
-    """
     args = define_arguments().parse_args()
     seq, GC_percentages = parse_rosalind_input(args.input)
 

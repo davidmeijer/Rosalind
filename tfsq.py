@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: FASTQ format introduction
-http://rosalind.info/problems/tfsq/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 import subprocess
 
-# Classes and functions:
 def define_arguments():
     """
     Defines possible command line arguments.
@@ -25,14 +20,12 @@ def define_arguments():
 def fastq_to_fasta(fn_in, 
                    fn_out=None, 
                    del_old=False):
-    """
-    Converts FASTQ file to FASTA format.
+    """Converts FASTQ file to FASTA format.
     
     Args:
         fn_in (str): input file name for file in FASTQ format.
         fn_out (str): output file name for file in FASTA format.
-        del_old (bool): delete input file.
-    """
+        del_old (bool): delete input file."""
     if fn_out == None:
         # Only split on last '.' delimiter to exchange format:
         fn_out = ''.join(fn_in.rsplit('.', 1)[:-1]) + '.fq'
@@ -56,11 +49,7 @@ def fastq_to_fasta(fn_in,
         cmd = 'rm {0}'.format(fn_in)
         subprocess.run(cmd, shell=True, check=True)
 
-# Main code:
 def main():
-    """
-    Main code.
-    """
     args = define_arguments().parse_args() 
     fastq_to_fasta(args.input)
 

@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Finding a Spliced Motif
-"""
+"""Author: David Meijer"""
+
 import argparse
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind exercise specific input file '+\
@@ -26,9 +22,7 @@ def parse_rosalind_input(path_to_input):
     Returns:
         fasta_dict (dict): dictionary containing parses fasta input
         lines as {header : s, header : t} with s as nucleotide string
-        ant t as a subsequence of a nucleotide string.
-
-    """
+        ant t as a subsequence of a nucleotide string."""
     fasta_dict = {}
 
     with open(path_to_input, 'r') as in_fo:
@@ -60,9 +54,7 @@ def find_indices(s, t):
     Returns:
         indices (list): list of lists with subsequence indices as lists
         of integers of indexes were to find the subsequence in the
-        sequence.
-
-    """
+        sequence."""
     indices = []
 
     corr = 1
@@ -75,9 +67,6 @@ def find_indices(s, t):
     return indices
 
 def main():
-    """Main code.
-
-    """
     args = define_arguments().parse_args()
     fasta_dict = parse_rosalind_input(args.input)
 

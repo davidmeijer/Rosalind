@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Introduction to Set Operations
-"""
+"""Author: David Meijer"""
 import argparse
 
 def define_arguments():
-    """Defines possible command line arguments.
-    
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help = 'Rosalind input file.')
@@ -16,9 +11,6 @@ def define_arguments():
     return parser
     
 def main():
-    """Main code.
-    
-    """
     args = define_arguments().parse_args()
     
     
@@ -37,6 +29,5 @@ def main():
         fo.write(str(U - A) + '\n')
         fo.write(str(U - B) + '\n')
 
-    
 if __name__ == '__main__':
     main()

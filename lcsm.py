@@ -1,19 +1,11 @@
 #!/usr/bin/env python3
-"""
-
-Author: David Meijer
-
-Rosalind exercise: Find a Shared Motif.
-
-"""
+"""Author: David Meijer"""
 import argparse
 import random
 import copy
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -29,9 +21,7 @@ def parse_rosalind_input(path_to_input):
 
     Returns:
         fasta_dict (dict): containing parsed input fasta lines as
-        {header : seq, ...}.
-
-    """
+        {header : seq, ...}."""
     fasta_dict = {}
 
     with open(path_to_input, 'r') as in_fo:
@@ -51,9 +41,7 @@ def parse_rosalind_input(path_to_input):
 
 
 class find_shared_motif():
-    """Functions for finding largest shared motif among all fasta seqs.
-
-    """
+    """Functions for finding largest shared motif among all fasta seqs."""
     def __init__(self, fasta_dict):
         """Class input arguments.
 
@@ -62,17 +50,13 @@ class find_shared_motif():
             {header : seq, ...}.
 
         Returns:
-            shared_motifs (list): all shared motifs found.
-
-        """
+            shared_motifs (list): all shared motifs found."""
         self.fasta_dict = fasta_dict
         self.shared_motifs = []
 
 
     def pipeline(self):
-        """Pipeline for finding largest shared motif.
-
-        """
+        """Pipeline for finding largest shared motif."""
         # Find largest shared motif between two random seqs and trim of
         # other part of seqs:
         header1, seq1 = self.choose_random_entries()
@@ -93,15 +77,12 @@ class find_shared_motif():
 
         # Determine largest shared motif:
 
-
     def choose_random_entries(self):
         """Chooses entry from dictionary at random and deletes it.
 
         Returns:
             header (str): header of random DNA sequence.
-            seq (str): random DNA sequence.
-
-        """
+            seq (str): random DNA sequence."""
         header, seq = random.choice(list(self.fasta_dict.items()))
         del self.fasta_dict[header]
 
@@ -116,9 +97,7 @@ class find_shared_motif():
             seq2 (str): DNA sequence 2.
 
         Returns:
-            motif (str): largest shared motif between seq1 and seq2.
-
-        """
+            motif (str): largest shared motif between seq1 and seq2."""
         slices = self.partition(seq1)
 
         slice_matches = []
@@ -138,9 +117,7 @@ class find_shared_motif():
             s (str): string of any length.
 
         Returns:
-            substrings (list): all unique possible substrings of s.
-
-        """
+            substrings (list): all unique possible substrings of s."""
         substrings = []
 
         for j in range(len(s)):
@@ -159,9 +136,7 @@ class find_shared_motif():
             motif (str): largest shared motif until now.
 
         Returns:
-            motif (str): shorter largest shared motif..
-
-        """
+            motif (str): shorter largest shared motif.."""
         pop_list = []
 
         for header, seq in self.fasta_dict.items():
@@ -172,13 +147,10 @@ class find_shared_motif():
             del self.fasta_dict[header]
 
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     fasta_dict = parse_rosalind_input(args.input)
     find_shared_motif(fasta_dict).pipeline()
-
 
 if __name__ == '__main__':
     main()

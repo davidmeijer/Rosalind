@@ -1,18 +1,10 @@
 #!/usr/bin/env python3
-"""
-
-Author: David Meijer
-
-Rosalind exercise: Concensus and Profile
-
-"""
+"""Author: David Meijer"""
 import argparse
 import pandas as pd
 
 def define_arguments():
-    """Define possible command line arguments.
-
-    """
+    """Define possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -28,9 +20,7 @@ def parse_rosalind_input(path_to_input):
 
     Returns:
         fasta_dict (dict): dictionary containing input DNA fasta
-        sequences.
-
-    """
+        sequences."""
     fasta_dict = {}
 
     with open(path_to_input, 'r') as in_fo:
@@ -57,9 +47,7 @@ def create_df(fasta_dict):
         sequences.
 
     Returns:
-        df (pandas dataframe): contains ACTG count per position.
-
-    """
+        df (pandas dataframe): contains ACTG count per position."""
     # Create four rows (ACTG) and approriate number of columns per
     # sequence string position:
     index = ['A', 'C', 'T', 'G']
@@ -85,9 +73,7 @@ def create_concensus_seq(df):
         df (pandas dataframe): contains ACTG count per position.
 
     Returns:
-        concensus_seq (str): concensus sequence based on counts.
-
-    """
+        concensus_seq (str): concensus sequence based on counts."""
     concensus_seq = []
 
     for max_count  in df.idxmax(axis=0):
@@ -97,9 +83,7 @@ def create_concensus_seq(df):
 
 
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     fasta_dict = parse_rosalind_input(args.input)
     df = create_df(fasta_dict)

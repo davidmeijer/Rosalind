@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Longest Increasing Subsequence
-"""
+"""Author: David Meijer"""
+
 import argparse
 import copy
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind exercise specific input file.')
@@ -25,9 +21,7 @@ def parse_rosalind_input(path_to_input):
     Returns:
         n (int): positive integer.
         perm_n (list): list of integers containing a permutation of
-        length n.
-
-    """
+        length n."""
     with open(path_to_input, 'r') as in_fo:
         n = in_fo.readline().strip()
         perm_n = in_fo.readline().strip().split()
@@ -35,9 +29,7 @@ def parse_rosalind_input(path_to_input):
     return int(n), [int(perm) for perm in perm_n]
 
 def longest_subsequence(n, perm_list):
-    """Get longest increasing subsequence of list of integers.
-
-    """
+    """Get longest increasing subsequence of list of integers."""
     final_routes = []
 
     for j, seed in enumerate(perm_list):
@@ -64,7 +56,7 @@ def longest_subsequence(n, perm_list):
     return final_routes
 
 def finalize_route(current_route, left_perms):
-    """"""
+    """Finalizes route."""
     for left_perm in left_perms:
         if left_perm < current_route[-1]:
             new_route = current_route + [left_perm]
@@ -76,9 +68,7 @@ def finalize_route(current_route, left_perms):
                     yield route
 
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     n, perm_n = parse_rosalind_input(args.input)
 

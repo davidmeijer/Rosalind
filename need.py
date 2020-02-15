@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: Pairwise Global Alignment
-http://rosalind.info/problems/need/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 from Bio import Entrez
 import subprocess
 
-# Classes and functions:
 def define_arguments():
-    """
-    Defines command line arguments.
+    """Defines command line arguments.
     
     Returns:
-        parser (obj): defines command line arguments.
-    """
+        parser (obj): defines command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
@@ -24,15 +17,13 @@ def define_arguments():
     return parser
     
 def retrieve_GenBank_record(ids):
-    """
-    Retrieves GenBank records with GenBank IDs.
+    """Retrieves GenBank records with GenBank IDs.
     
     Args:
         ids (list): list of GenBank IDs as strings.
         
     Returns:
-        records (): retrieved GenBank records.
-    """
+        records (): retrieved GenBank records."""
     Entrez.email  = 'david-meijer@live.nl'
     handle = Entrez.efetch(db='nucleotide', id=ids, rettype='fasta')
     records = handle.read().split('\n\n')
@@ -48,16 +39,14 @@ def retrieve_GenBank_record(ids):
         print('Could not retrieve GenBank records!')
         
 def run_needle(seqA, seqB):
-    """
-    Run alignment with Needle from EMBOSS on two sequences.
+    """Run alignment with Needle from EMBOSS on two sequences.
     
     Args:
         seqA (str): (DNA) sequence.
         seqB (str): (DNA) sequence.
         
     Returns:
-        out (str): file name of output alignment file.
-    """
+        out (str): file name of output alignment file."""
     fn1, fn2, out = './seq1.fasta', './seq2.fasta', '.alignment.txt'
     
     with open(fn1, 'w') as fo1:
@@ -80,15 +69,13 @@ def run_needle(seqA, seqB):
     return out
     
 def parse_needle(fn):
-    """
-    Parses alignment file and returns alignment score.
+    """Parses alignment file and returns alignment score.
     
     Args:
         fn (str): filename of Needle output alignment file.
         
     Returns:
-        score (int): alignment score from Needle alignment file.
-    """
+        score (int): alignment score from Needle alignment file."""
     score = 0
     
     with open(fn, 'r') as fo:
@@ -102,9 +89,7 @@ def parse_needle(fn):
     
 # Main code:
 def main():
-    """
-    Main code.
-    """
+    """Main code."""
     # Define arguments:
     args = define_arguments().parse_args()
     fn = args.input

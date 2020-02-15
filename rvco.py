@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: Complementing a Strand of DNA
-http://rosalind.info/problems/rvco/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-# Classes and functions:
 def define_arguments():
-    """
-    Defines possible command line arguments.
+    """Defines possible command line arguments.
     
     Returns:
-        parser (obj): defines command line arguments.
-    """
+        parser (obj): defines command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
@@ -24,15 +17,13 @@ def define_arguments():
     return parser
     
 def parse_fasta(fn):
-    """
-    Parses FASTA file into dictionary as {header:seq,...}.
+    """Parses FASTA file into dictionary as {header:seq,...}.
     
     Args:
         fn (str): file name of file in FASTA format.
         
     Returns:
-        fasta_dict (dict): parsed FASTA file as {header:sequence,...}. 
-    """
+        fasta_dict (dict): parsed FASTA file as {header:sequence,...}. """
     fasta_dict = {}
     
     with open(fn, 'r') as fo:
@@ -45,11 +36,7 @@ def parse_fasta(fn):
     
     return fasta_dict
 
-# Main code:
 def main():
-    """
-    Main code.
-    """
     args = define_arguments().parse_args()
     fasta_dict = parse_fasta(args.input)
     

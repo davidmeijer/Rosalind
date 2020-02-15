@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Transitions and Transversions
-"""
+"""Author: David Meijer"""
+
 import argparse
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
@@ -23,9 +19,7 @@ def parse_fasta(path_to_input):
 
     Returns:
         fasta_dict (dict): dictionary containing parsed fasta file
-        as {header : seq, ...}.
-
-    """
+        as {header : seq, ...}."""
     fasta_dict = {}
 
     with open(path_to_input, 'r') as in_fo:
@@ -43,9 +37,6 @@ def parse_fasta(path_to_input):
     return fasta_dict
 
 def main():
-    """Main code.
-
-    """
     args = define_arguments().parse_args()
     fasta_dict = parse_fasta(args.input)
 
@@ -64,7 +55,6 @@ def main():
                         transversions += 1
 
             print(round(transitions / transversions, 11))
-
 
 if __name__ == '__main__':
     main()

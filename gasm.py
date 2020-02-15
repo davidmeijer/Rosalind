@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Genome Assembly Using Reads
-"""
+"""Author: David Meijer"""
+
 import argparse
 import string
 
 def define_arguments():
-    """Defines possible command line arguments.
-    
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help = 'Rosalind input file.')
@@ -23,9 +19,7 @@ def revcomp(dna):
         dna (str): DNA string.
         
     Returns:
-        rcdna (str): reverse complement of DNA string.
-        
-    """
+        rcdna (str): reverse complement of DNA string."""
     rcdna  = dna.translate(dna.maketrans('ACTG', 'TGAC'))[::-1]
     
     return rcdna
@@ -37,9 +31,7 @@ def DeBruijn_adjacency_list(dnas, kmer_size):
         kmers (list): list of kmers.
         
     Returns:
-        adjl (set): adjacency list for De Bruijn graph for kmer list.
-    
-    """
+        adjl (set): adjacency list for De Bruijn graph for kmer list."""
     adjl = set()
     
     dnas += [revcomp(dna) for dna in dnas]
@@ -60,9 +52,7 @@ def make_superstring(adjl):
         adjl (set): adjacency list for De Bruijn graph for kmer list.
         
     Returns:
-        superstring (str): superstring from De Bruijn adjacency list.
-        
-    """
+        superstring (str): superstring from De Bruijn adjacency list."""
     superstring = []
     
     adjg = dict(adjl)
@@ -75,9 +65,7 @@ def make_superstring(adjl):
     return ''.join(superstring)
 
 def main():
-    """Main code.
-    
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     
     with open(args.input, 'r') as fo:

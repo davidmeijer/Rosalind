@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: Data Formats
-http://rosalind.info/problems/frmt/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 from Bio import Entrez
 
-# Classes and functions:
 def define_arguments():
     """
     Defines possible command line arguments.
@@ -23,15 +18,13 @@ def define_arguments():
     return parser
     
 def retrieve_GenBank_record(ids):
-    """
-    Retrieves GenBank records with GenBank IDs.
+    """Retrieves GenBank records with GenBank IDs.
     
     Args:
         ids (list): list of GenBank IDs as strings.
         
     Returns:
-        records (): retrieved GenBank records.
-    """
+        records (): retrieved GenBank records."""
     Entrez.email  = 'david-meijer@live.nl'
     handle = Entrez.efetch(db='nucleotide', id=ids, rettype='fasta')
     records = handle.read().split('\n\n')
@@ -47,15 +40,13 @@ def retrieve_GenBank_record(ids):
         print('Could not retrieve GenBank records!')
         
 def shortest_seq_from_dict(fasta_dict):
-    """
-    Retrieves key for the shortest sequence in a {header:seq,...} dict.
+    """Retrieves key for the shortest sequence in a {header:seq,...} dict.
     
     Args:
         fasta_dict (dict): as {header:sequence,...}.
         
     Returns:
-        fasta_key (str): key of shortest sequence from fasta_dict.
-    """
+        fasta_key (str): key of shortest sequence from fasta_dict."""
     shortest_header, shortest_seq = None, float('inf')
     
     for header, seq in fasta_dict.items():
@@ -65,11 +56,8 @@ def shortest_seq_from_dict(fasta_dict):
             
     return shortest_header
     
-# Main code:
 def main():
-    """
-    Main code.
-    """
+    """Main code."""
     # Define command line arguments:
     args = define_arguments().parse_args()
     fn = args.input

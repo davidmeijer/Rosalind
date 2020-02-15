@@ -1,18 +1,11 @@
 #!/usr/bin/env python3
-"""
+"""Author: David Meijer"""
 
-Author: David Meijer
-
-Rosalind exercise: Genome Assembly as Shortest Superstring.
-
-"""
 import argparse
 import copy
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -27,9 +20,7 @@ def parse_rosalind_input(path_to_input):
 
     Returns:
         fasta_dict (dict): dictionary containing parses fasta input
-        file as {header : seq, ...}.
-
-    """
+        file as {header : seq, ...}."""
     fasta_dict = {}
 
     with open(path_to_input, 'r') as in_fo:
@@ -57,9 +48,7 @@ def partition_ends(seq):
         start_snippets (list): list of strings containing start snippets
         for genome assembly.
         end_snippets (list): list of strings containing end snippets
-        for genome assembly.
-
-    """
+        for genome assembly."""
     start_snippets = []
     end_snippets = []
 
@@ -83,9 +72,7 @@ def match_snippets(snippets_dict):
     Returns:
         matching_dict (dict): contains header with directional
         matches as {header : {start: header_match, end: header_match},
-        ...}.
-
-    """
+        ...}."""
     matching_dict = {}
 
     for header in snippets_dict:
@@ -109,33 +96,19 @@ def match_snippets(snippets_dict):
     return matching_dict
 
 class pathfinding():
-    """Finds possible assembly paths.
-
-    """
+    """Finds possible assembly paths."""
     def __init__(self, matching_dict):
         """Assigns variables.
 
         Args:
             matching_dict (dict): contains header with directional
             matches as {header : {start: header_match, end: header_match},
-            ...}.
-
-        """
+            ...}."""
         self.matching_dict = matching_dict
         self.routes = []
 
     def find_routes(self):
-        """Filters out short matches when there is a longer match.
-
-        """
-        # Maybe first determine from which seq you can go through all other
-        # sequences? Best final sequence has most overlap between sequences
-        # resulting in the shortest assembled genome!
-
-        # Restructure below so it takes every sequence and index every
-        # possible route per starting position. Than determine starting
-        # position.
-
+        """Filters out short matches when there is a longer match."""
         for header, matches in list(self.matching_dict.items()):
             route_dict = copy.deepcopy(self.matching_dict)
             del route_dict[header]
@@ -155,12 +128,7 @@ class pathfinding():
             'end' : [[overlapping_header, match], ...]}
             route_dict (dict): contains header with directional
             matches as {header : {start: header_match, end: header_match},
-            ...}. Start sequence is deleted from this dictionary.
-
-        Returns:
-            paths ():
-
-        """
+            ...}. Start sequence is deleted from this dictionary."""
         paths = []
 
         # Add header and first steps as two-length paths:
@@ -180,9 +148,7 @@ class pathfinding():
         return paths
 
     def next_step(self, route_dict, paths):
-        """Take next step in pathfinding.
-
-        """
+        """Take next step in pathfinding."""
         new_paths = []
 
         for path in paths:
@@ -204,9 +170,7 @@ def filter_routes_on_length(routes, filter_length):
         filter_length (int): length that needs to be filtered on.
 
     Returns:
-        routes (list): all routes with certain filter_length.
-
-    """
+        routes (list): all routes with certain filter_length."""
     new_routes = []
 
     for route in routes:
@@ -224,9 +188,7 @@ def assemble_route(route, fasta_dict, matching_dict):
         matching_dict (dict):
 
     Returns:
-        assembly (str):
-
-    """
+        assembly (str):"""
     assembly = []
 
     # Start assembly:
@@ -246,9 +208,7 @@ def assemble_route(route, fasta_dict, matching_dict):
     return ''.join(assembly)
 
 def main():
-    """Main code.
-
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     fasta_dict = parse_rosalind_input(args.input)
 

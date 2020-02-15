@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""
-David Meijer
-Assignment: GenBank introduction
-http://rosalind.info/problems/gbk/
-"""
-# Imports:
+"""David Meijer"""
+
 import argparse
 from Bio import Entrez
 
-# Classes and functions:
 def define_arguments():
     """
     Defines possible command line arguments.
@@ -22,11 +17,8 @@ def define_arguments():
                         
     return parser
 
-# Main code:
 def main():
-    """
-    Main code.
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     
     with open(args.input, 'r') as fo:

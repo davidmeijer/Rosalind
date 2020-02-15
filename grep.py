@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: Genome Assembly with Perfect Cover and Repeats
-"""
+"""Author: David Meijer"""
 import argparse
 import string
 import copy

@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Assignment: INtroduction to Protein Databases
-http://rosalind.info/problems/dbpr/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import argparse
 import urllib.request
 import time
@@ -13,14 +9,11 @@ import re
 #from Bio import ExPASy
 #from Bio import SwissProt
 
-# Classes and functions:
 def define_arguments():
-    """
-    Defines possible command line arguments.
+    """Defines possible command line arguments.
     
     Returns:
-        parser (obj): contains user input command line arguments.
-    """
+        parser (obj): contains user input command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
@@ -28,9 +21,7 @@ def define_arguments():
     return parser
     
 class UniProt:
-    """
-    For requesting UniProt entries.
-    """
+    """For requesting UniProt entries."""
     def __init__(self, uniprot_id=None):
         self.up_id = uniprot_id
         
@@ -74,16 +65,14 @@ class UniProt:
             exit()
             
     def GO(self):
-        """
-        Retrieve Gene Ontology from raw UniProt entry.
+        """Retrieve Gene Ontology from raw UniProt entry.
         
         Args:
             raw_data (str): retrieved raw UniProt entry.
             up_format (str): retrieved format.
             
         Returns:
-            GO (list): Gene Ontology terms as strings in list.
-        """
+            GO (list): Gene Ontology terms as strings in list."""
         GO = []
         
         if self.format == '.txt':
@@ -96,9 +85,7 @@ class UniProt:
         self.GO = GO
 
 def main():
-    """
-    Main code.
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     
     with open(args.input, 'r') as fo:   

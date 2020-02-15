@@ -1,26 +1,18 @@
 #!/usr/bin/env python3
-"""
-Author: David Meijer
-Rosalind exercise: LCSQ
-http://rosalind.info/problems/lcsq/
-"""
-# Imports:
+"""Author: David Meijer"""
+
 import sys
 import argparse
 import random
 import pandas
 
-# Global variables:
 sys.setrecursionlimit(1500)
 
-# Classes and functions:
 def define_arguments():
-    """
-    Defines possible command line arguments.
+    """Defines possible command line arguments.
 
     Returns:
-        parser (object): contains user arguments.
-    """
+        parser (object): contains user arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input file.')
@@ -28,15 +20,13 @@ def define_arguments():
     return parser
 
 def parse_fasta(fn):
-    """
-    Parses Rosalind input.
+    """Parses Rosalind input.
 
     Args:
         fn (str): file name of Rosalind input file.
         
     Returns:
-        fasta_dict (dict): contains sequenses as {header:sequence,...}.
-    """
+        fasta_dict (dict): contains sequenses as {header:sequence,...}."""
     fasta_dict = {}
     
     with open(fn) as fo:
@@ -50,8 +40,7 @@ def parse_fasta(fn):
     return fasta_dict
 
 def random_string(slen, char_set='ACTG'):
-    """
-    Generate a random string of fixed length. 
+    """Generate a random string of fixed length. 
     
     Default: DNA.
     
@@ -60,23 +49,20 @@ def random_string(slen, char_set='ACTG'):
         char_set (str): char to choose from for random string.
         
     Returns:
-        rstring (str): random string of length slen.
-    """
+        rstring (str): random string of length slen."""
     rstring = ''.join(random.choice(char_set) for i in range(slen))
     
     return rstring
     
 def compute_lcs(A, B):
-    """
-    Computes Longest Common Subsequences between strings A and B.
+    """Computes Longest Common Subsequences between strings A and B.
     
     Args:
         A (str): string A.
         B (str): string B.
         
     Returns:
-        X (arr): matrix containing LCS paths for strings A and B.
-    """
+        X (arr): matrix containing LCS paths for strings A and B."""
     lenA, lenB = len(A), len(B)
     
     # Create matrix of zeros with dimensions lenA (col), lenB (row):
@@ -96,8 +82,7 @@ def compute_lcs(A, B):
     return X
 
 def backtrack_lcs(matrix, A, B, i, j):
-    """
-    Reads out all routes (LCSs) from LCS matrix.
+    """Reads out all routes (LCSs) from LCS matrix.
     
     Args:
         matrix (list of lists): containing LCSs.
@@ -107,8 +92,7 @@ def backtrack_lcs(matrix, A, B, i, j):
         j (int): location in B.
     
     Returns:
-        lcs (str): longest common substring from matrix.
-    """
+        lcs (str): longest common substring from matrix."""
     # Return LCS when begin of one of the strings is reached:
     if i == 0 or j == 0:
         return ""
@@ -124,9 +108,7 @@ def backtrack_lcs(matrix, A, B, i, j):
     return backtrack_lcs(matrix, A, B, i, j - 1)
 
 def main():
-    """
-    Main code.
-    """
+    """Main code."""
     args = define_arguments().parse_args()
     fasta = parse_fasta(args.input)
     
@@ -144,6 +126,5 @@ def main():
     LCS = backtrack_lcs(LCS_matrix, seq1, seq2, len(seq1), len(seq2))
     print(LCS)
 
-# Main code:
 if __name__ == '__main__':
     main()

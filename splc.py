@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
-"""
+"""Author: David Meijer"""
 
-Author: David Meijer
-
-Rosalind exercise: RNA splicing
-
-"""
 import argparse
 import string
 
@@ -30,9 +25,7 @@ codon_table = {
 
 
 def define_arguments():
-    """Defines possible command line arguments.
-
-    """
+    """Defines possible command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str, required=True,
                         help='Rosalind input.')
@@ -47,9 +40,7 @@ def parse_rosalind_input(path_to_input):
         specific input for this rosalind exercise.
 
     Returns:
-        fasta_dict (dict): parsed sequences as {header : seq}.
-
-    """
+        fasta_dict (dict): parsed sequences as {header : seq}."""
     fasta_dict = {}
 
     with open(path_to_input, 'r') as in_fo:
@@ -75,9 +66,7 @@ def splicing(fasta_dict):
         fasta_dict (dict): parsed sequences as {header : seq}.
 
     Returns:
-        spliced_dna (str): spliced DNA seq.
-
-    """
+        spliced_dna (str): spliced DNA seq."""
     # Get longest seq from fasta_dict and accompanying header:
     longest_seq = ''
     longest_seq_header = ''
@@ -101,9 +90,7 @@ def transcribe(dna):
         dna (str): DNA sequence.
 
     Returns:
-        rna (str): transcribed DNA sequence into RNA.
-
-    """
+        rna (str): transcribed DNA sequence into RNA."""
     trans_table = str.maketrans('GCTA', 'GCUA')
 
     rna = str.translate(dna, trans_table)
@@ -117,9 +104,7 @@ def translate(rna):
         dna (str): spliced DNA seq.
 
     Returns:
-        pep (str): translated spliced DNA seq.
-
-    """
+        pep (str): translated spliced DNA seq."""
     pep = []
 
     for i in range(0, len(rna), 3):
@@ -130,9 +115,6 @@ def translate(rna):
 
 
 def main():
-    """Main code.
-
-    """
     args = define_arguments().parse_args()
     fasta_dict = parse_rosalind_input(args.input)
     spliced_dna = splicing(fasta_dict)
