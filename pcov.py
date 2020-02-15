@@ -2,7 +2,6 @@
 """Author: David Meijer"""
 
 import argparse
-import numpy as np
 
 def define_arguments():
     """Defines possible command line arguments."""
