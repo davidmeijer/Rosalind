@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""David Meijer"""
+"""Author: David Meijer"""
 
 import argparse
 from Bio import Entrez
