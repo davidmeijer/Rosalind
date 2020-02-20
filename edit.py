@@ -2,12 +2,7 @@
 """Author: David Meijer"""
 
 """
-
-
 Work in progress!
-
-
-
 """
 
 import argparse
@@ -86,11 +81,8 @@ class Matrix(object):
 
     def SetMatrix(self):
         """Sets matrix with defined values."""
-        self.matrix = [[self._fill for i in range(self.ncols)] for j in range(self.nrows)]
-
-        #row = [self._fill for i in range(self.ncols)]
-        #matrix = [row for j in range(self.nrows)]
-        #self.matrix = matrix
+        self.matrix = [[self._fill for i in range(self.ncols)] \
+                        for j in range(self.nrows)]
 
     def Dimensions(self):
         """Return matrix dimensions."""
@@ -133,63 +125,21 @@ class Protein(object):
         """Returns number of amino acids in peptide string."""
         return len(self.string)
 
-    def LongestCommonSubstring(self, other):
-        """Returns longest common substring."""
-        if self.Length() != other.Length():
-            Longest = max(self.Length(), other.Length())
-            Shortest = min(self.Length(), other.Length())
-            if Longest == self.Length():
-                Longest = self; Shortest = other
-            else:
-                Longest = other; Shortest = self
-        else:
-            Longest = self; Shortest = other
+    def LevenshteinDistance(self, other):
+        """Calculates Levenshtein distance between peptides."""
 
-        X = Matrix(Shortest.Length() + 1, Longest.Length() + 1)
+    def CommonLongestSubstring(self, other):
+        """Calculates common longest substring between peptides."""
 
-        for i in range(Longest.Length()):
-            for j in range(Shortest.Length()):
-                if Longest.string[i] == Shortest.string[j]:
-                    X.matrix[j + 1][i + 1] = X.matrix[j][i] + 1
-                else:
-                    X.matrix[j + 1][i + 1] = max(X.matrix[j + 1][i], X.matrix[j][i + 1])
-
-        print(X)
-
-        LCS = Longest.BacktrackLCS(Shortest, X.matrix, Longest.Length(), Shortest.Length())
-
-        return LCS
-
-    def BacktrackLCS(self, other, LCSm, i, j):
-        if i == 0 or j == 0:
-            return ''
-
-        if self.string[i - 1] == other.string[j - 1]:
-            return self.BacktrackLCS(other, LCSm, i - 1, j - 1) + self.string[i - 1]
-
-        if LCSm[j][i - 1] > LCSm[j - 1][i]:
-            return self.BacktrackLCS(other, LCSm, i - 1, j)
-
-        return self.BacktrackLCS(other, LCSm, i, j - 1)
 
 def main():
     args = DefineArguments().parse_args()
     fasta = FastaParser(args.i)
 
-    s = Protein(fasta[list(fasta.keys())[0]])
-    t = Protein(fasta[list(fasta.keys())[1]])
+    s = Protein(fasta[list(fasta.keys())[0]]) # Ugh...
+    t = Protein(fasta[list(fasta.keys())[1]]) # Ugh...
 
-    print(s.LongestCommonSubstring(t))
-
-    # Compute LCS matrix for two strings:
-    #LCS_matrix = compute_lcs(s.string, t.string)
-
-    # Get max LCS length from matrix:
-    #print(max([max(x) for x in LCS_matrix]))
-
-    # Read out all LCSs from LCS matrix:
-    #LCS = backtrack_lcs(LCS_matrix, s.string, t.string, len(s.string), len(t.string))
-    #print(LCS)
+    print(s, t)
 
 if __name__ == '__main__':
     main()

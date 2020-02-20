@@ -4,7 +4,6 @@
 import sys
 import argparse
 import random
-import pandas
 
 sys.setrecursionlimit(1500)
 
