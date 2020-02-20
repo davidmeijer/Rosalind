@@ -88,6 +88,10 @@ class Matrix(object):
         """Sets matrix with defined values."""
         self.matrix = [[self._fill for i in range(self.ncols)] for j in range(self.nrows)]
 
+        #row = [self._fill for i in range(self.ncols)]
+        #matrix = [row for j in range(self.nrows)]
+        #self.matrix = matrix
+
     def Dimensions(self):
         """Return matrix dimensions."""
         return [self.ncols, self.nrows]
@@ -149,6 +153,8 @@ class Protein(object):
                     X.matrix[j + 1][i + 1] = X.matrix[j][i] + 1
                 else:
                     X.matrix[j + 1][i + 1] = max(X.matrix[j + 1][i], X.matrix[j][i + 1])
+
+        print(X)
 
         LCS = Longest.BacktrackLCS(Shortest, X.matrix, Longest.Length(), Shortest.Length())
 
