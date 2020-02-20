@@ -127,6 +127,9 @@ class Protein(object):
 
     def LevenshteinDistance(self, other):
         """Calculates Levenshtein distance between peptides."""
+        LevenshteinDistance = 0
+
+        return LevenshteinDistance
 
     def CommonLongestSubstring(self, other):
         """Calculates common longest substring between peptides."""
@@ -139,7 +142,7 @@ def main():
     s = Protein(fasta[list(fasta.keys())[0]]) # Ugh...
     t = Protein(fasta[list(fasta.keys())[1]]) # Ugh...
 
-    print(s, t)
+    print(s.LevenshteinDistance(t))
 
 if __name__ == '__main__':
     main()
