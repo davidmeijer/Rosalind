@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 """Author: David Meijer"""
 
-"""
-Work in progress!
-"""
-
 import argparse
 
 def DefineArguments():
@@ -84,6 +80,15 @@ class Matrix(object):
         self.matrix = [[self._fill for i in range(self.ncols)] \
                         for j in range(self.nrows)]
 
+    def SetValue(self, x, y, value):
+        """Sets value in matrix at intersection of row x and column y."""
+        self.matrix[x][y] = value
+        return self.matrix
+
+    def ReturnValue(self, x, y):
+        """Returns value in matrix at intersection of row x and column y."""
+        return self.matrix[x][y]
+
     def Dimensions(self):
         """Return matrix dimensions."""
         return [self.ncols, self.nrows]
@@ -127,9 +132,28 @@ class Protein(object):
 
     def LevenshteinDistance(self, other):
         """Calculates Levenshtein distance between peptides."""
-        LevenshteinDistance = 0
+        dist = Matrix(self.Length() + 1, other.Length() + 1)
 
-        return LevenshteinDistance
+        for i in range(0, self.Length() + 1):
+            dist.SetValue(i, 0, i)
+
+        for j in range(0, other.Length() + 1):
+            dist.SetValue(0, j, j)
+
+        for j in range(1, other.Length() + 1):
+            for i in range(1, self.Length() + 1):
+                if self.string[i - 1] == other.string[j - 1]:
+                    substitutionCost = 0
+                else:
+                    substitutionCost = 1
+
+                dist.SetValue(i, j, min([
+                dist.ReturnValue(i - 1, j) + 1,
+                dist.ReturnValue(i, j - 1) + 1,
+                dist.ReturnValue(i - 1, j - 1) + substitutionCost
+                ]))
+
+        return dist.ReturnValue(self.Length(), other.Length())
 
     def CommonLongestSubstring(self, other):
         """Calculates common longest substring between peptides."""
@@ -139,8 +163,8 @@ def main():
     args = DefineArguments().parse_args()
     fasta = FastaParser(args.i)
 
-    s = Protein(fasta[list(fasta.keys())[0]]) # Ugh...
-    t = Protein(fasta[list(fasta.keys())[1]]) # Ugh...
+    t = Protein(fasta[list(fasta.keys())[0]]) # Ugh...
+    s = Protein(fasta[list(fasta.keys())[1]]) # Ugh...
 
     print(s.LevenshteinDistance(t))
 
