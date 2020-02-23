@@ -161,13 +161,13 @@ class Protein(object):
         return dist.ReturnValue(self.Length(), other.Length())
 
     def LevenshteinAlignment(self, other):
-        """Returns Levenshtrein alignment between two peptides."""
+        """Returns Levenshtein alignment between two peptides."""
         dist = self.LevenshteinDistanceMatrix(other)
         return self.LevenshteinTraceback(other, dist,
                                          self.Length(), other.Length())
 
     def LevenshteinTraceback(self, other, dist, i, j):
-        """Traceback function for Levenshtrein alignment."""
+        """Traceback function for Levenshtein alignment."""
         if i == 0 or j == 0:
             return ''
 
