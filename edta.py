@@ -199,12 +199,15 @@ def main():
     s = Protein(fasta[list(fasta.keys())[0]]) # Ugh...
     t = Protein(fasta[list(fasta.keys())[1]]) # Ugh...
 
-    with open('output_edta.txt', 'w') as fo:
-        fo.write('{0}\n{1}\n{2}'.format(
-        s.LevenshteinDistance(t),
-        s.LevenshteinAlignment(t),
-        t.LevenshteinAlignment(s)
-        ))
+    print(s.LevenshteinAlignment(t))
+    print(t.LevenshteinAlignment(s))
+
+    #with open('output_edta.txt', 'w') as fo:
+    #    fo.write('{0}\n{1}\n{2}'.format(
+    #    s.LevenshteinDistance(t),
+    #    s.LevenshteinAlignment(t),
+    #    t.LevenshteinAlignment(s)
+    #    ))
 
 if __name__ == '__main__':
     main()
