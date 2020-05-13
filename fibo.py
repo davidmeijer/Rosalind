@@ -4,7 +4,7 @@ Author: David Meijer
 
 Script to solve Rosalind exercise Fibonacci Numbers (fibo).
 
-Run script in command line as:
+Run script in command line as: "python3 fibo.py <input_filename>"
 """
 
 # import statements
