@@ -64,10 +64,11 @@ def connected_components(graph):
     return components
 
 def explore(root, graph):
-    """Returns list of distances of root towards all other nodes in graph.
+    """Returns list of visitable nodes from root node.
 
     root: int, describing the starting node.
     graph: dict, describing directed graph as {node : [reachable nodes], ...}.
+    visited: list, nodes that can visited from root.
     """
     visited = [root]
     queue = [root]
