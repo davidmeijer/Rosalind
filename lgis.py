@@ -1,106 +1,100 @@
 #!/usr/bin/env python3
-"""Author: David Meijer"""
+"""
+Author: David Meijer
 
-import argparse
-import copy
+Script for solving Rosalind exercise Longest Increasing Subsequence
+(lgis).
 
-def define_arguments():
-    """Defines possible command line arguments."""
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-input', type=str, required=True,
-                        help='Rosalind exercise specific input file.')
+Usage: "python3 lgis.py <input_file.txt>"
+"""
 
-    return parser
+# import statements
+from sys import argv
 
-def parse_rosalind_input(path_to_input):
-    """Parses Rosalind exericse specific input.
+# functions
+def parse_input(filename):
+	"""Parses positive integer and permutation from input file.
+	
+	filename: str, file containing input integer and permutation.
+	
+	Input file consists of two lines: on the first line there is a 
+	single integer and on the second line there is a permutation, 
+	several numbers seperated each by a space.
+	"""
+	with open(filename, 'r') as fo:
+		n = int(fo.readline().strip())
+		perm = list(map(int, fo.readline().strip().split()))
+		
+	return n, perm
+	
+def compute_lcs(A, B):
+    """Computes Longest Common Subsequences between strings A and B.
 
     Args:
-        path_to_input (str): path to input file.
+        A (str): string A.
+        B (str): string B.
 
     Returns:
-        n (int): positive integer.
-        perm_n (list): list of integers containing a permutation of
-        length n."""
-    with open(path_to_input, 'r') as in_fo:
-        n = in_fo.readline().strip()
-        perm_n = in_fo.readline().strip().split()
+        X (arr): matrix containing LCS paths for strings A and B."""
+    lenA, lenB = len(A), len(B)
 
-    return int(n), [int(perm) for perm in perm_n]
+    # Create matrix of zeros with dimensions lenA (col), lenB (row):
+    X = [[0 for i in range(lenA + 1)] for j in range(lenB + 1)]
+    # lenA/lenB + 1 is for inserting a zero column and row!
 
-def longest_subsequence(n, perm_list):
-    """Get longest increasing subsequence of list of integers."""
-    final_routes = []
-
-    for j, seed in enumerate(perm_list):
-        seed_list = []
-
-        cut_perm_list = perm_list[j+1:]
-        for i, next_seed in enumerate(cut_perm_list):
-            if next_seed < seed:
-                seed_list.append([seed, next_seed, cut_perm_list[i+1:]])
-
-        pop_seeds = []
-        for i, elem in enumerate(seed_list):
-            if elem[-2] == 1 or len(elem[-1]) == 0 or elem[-2] < min(
-                    elem[-1]):
-                pop_seeds.append(i)
-                final_routes.append(elem[:-1])
-        for pop_seed in pop_seeds[::-1]:
-            seed_list.pop(pop_seed)
-
-        for seed_route in seed_list:
-            for route in finalize_route(seed_route[:-1], seed_route[-1]):
-                final_routes.append(route)
-
-    return final_routes
-
-def finalize_route(current_route, left_perms):
-    """Finalizes route."""
-    for left_perm in left_perms:
-        if left_perm < current_route[-1]:
-            new_route = current_route + [left_perm]
-            next_perms = left_perms[(left_perms.index(left_perm))+1:]
-            if new_route[-1] == 1 or len(next_perms) == 0 or new_route[-1] < min(next_perms):
-                yield new_route
+    # Populate X with scores for calculating LCS:
+    for i in range(lenA):
+        for j in range(lenB):
+            if A[i] == B[j]:
+                # +1 if two nucleotides are the same (diagonal):
+                X[j + 1][i + 1] = X[j][i] + 1
             else:
-                for route in finalize_route(new_route, next_perms):
-                    yield route
+                # If not the same, get highest value from top/left:
+                X[j + 1][i + 1] = max(X[j + 1][i], X[j][i + 1])
 
+    return X
+
+def backtrack_lcs(matrix, A, B, i, j):
+    """Reads out all routes (LCSs) from LCS matrix.
+
+    Args:
+        matrix (list of lists): containing LCSs.
+        A (str): string A.
+        B (str): string B.
+        i (int): location in A.
+        j (int): location in B.
+
+    Returns:
+        lcs (str): longest common substring from matrix."""
+    # Return LCS when begin of one of the strings is reached:
+    if i == 0 or j == 0:
+        return ""
+
+    # If equal return char:
+    if A[i - 1] ==  B[j - 1]:
+        return backtrack_lcs(matrix, A, B, i - 1, j - 1) + A[i - 1]
+
+    # Choose left over top if larger, otherwise (equal) choose top:
+    if matrix[j][i - 1] > matrix[j - 1][i]:
+        return backtrack_lcs(matrix, A, B, i - 1, j)
+
+    return backtrack_lcs(matrix, A, B, i, j - 1)
+	
+	
+# main
 def main():
-    """Main code."""
-    args = define_arguments().parse_args()
-    n, perm_n = parse_rosalind_input(args.input)
-
-    # Get longest increasing subsequence:
-    incr_routes = longest_subsequence(n, perm_n[::-1])
-
-    longest_routes = []
-    longest_length = 0
-    for route in incr_routes:
-        if len(route) == longest_length:
-            longest_routes.append(route)
-        if len(route) > longest_length:
-            longest_length = len(route)
-            longest_routes = [route]
-
-    #print(longest_routes)
-    print(' '.join([str(x) for x in longest_routes[0][::-1]]))
-
-    # Get longest decreasing subsequence:
-    decr_routes = longest_subsequence(n, perm_n)
-
-    longest_routes = []
-    longest_length = 0
-    for route in decr_routes:
-        if len(route) == longest_length:
-            longest_routes.append(route)
-        if len(route) > longest_length:
-            longest_length = len(route)
-            longest_routes = [route]
-
-    #print(longest_routes)
-    print(' '.join([str(x) for x in longest_routes[0]]))
-
-if __name__ == '__main__':
-    main()
+	
+	# step 1: parse positive integer and permutation from input file
+	n, perm = parse_input(argv[1])
+	perm = "".join(list(map(str, perm)))
+	
+	# step 2:
+	order = "".join(list(map(str, list(range(1, n + 1)))))
+	
+	for count in [order, order[::-1]]:
+		lcs = compute_lcs(perm, count)
+		seq = backtrack_lcs(lcs, perm, count, len(perm), len(count))
+		print(" ".join(list(map(str, [char for char in seq]))))
+	
+if __name__ == "__main__":
+	main()
