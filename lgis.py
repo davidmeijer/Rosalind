@@ -77,6 +77,8 @@ def longest_path(graph):
     # no more neighbours and unvisited nodes in queue is also empty then
     # return path ...
     paths = []
+    
+    
 
 # Main
 def main():
