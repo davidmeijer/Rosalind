@@ -1,100 +1,100 @@
 #!/usr/bin/env python3
 """
-Author: David Meijer
+Author:         David Meijer
+Description:    Script for solving Rosalind exercise Longest Increasing 
+                Subsequence (lgis).
 
-Script for solving Rosalind exercise Longest Increasing Subsequence
-(lgis).
+Usage:          python3 lgis.py <Rosalind input file>
 
-Usage: "python3 lgis.py <input_file.txt>"
+Arguments:
+    <Rosalind input file>   .txt input file containing a single positive 
+                            integer on the first line and a collection of
+                            space separated positive integers on the second 
+                            line.
 """
-
-# import statements
+# Import statements
 from sys import argv
 
-# functions
+# Functions
 def parse_input(filename):
 	"""Parses positive integer and permutation from input file.
 	
-	filename: str, file containing input integer and permutation.
+    Arguments;
+        filename: str, file containing input integer and permutation.
+        
+    Returns:
+        permutation_length: int, length of the permutation.
+        permutation: list of ints, describing a permutation of length 
+                     permutation_length.
 	
 	Input file consists of two lines: on the first line there is a 
 	single integer and on the second line there is a permutation, 
 	several numbers seperated each by a space.
 	"""
-	with open(filename, 'r') as fo:
-		n = int(fo.readline().strip())
-		perm = list(map(int, fo.readline().strip().split()))
+	with open(filename, "r") as file_open:
+		permutation_length = int(file_open.readline().strip())
+		permutation = list(map(int, file_open.readline().strip().split()))
 		
-	return n, perm
-	
-def compute_lcs(A, B):
-    """Computes Longest Common Subsequences between strings A and B.
-
-    Args:
-        A (str): string A.
-        B (str): string B.
-
+	return permutation_length, permutation
+    
+def create_graph(permutation):
+    """Returns directed graph from permutation.
+    
+    Arguments:
+        permutation_length: int, length of the permutation.
+        permutation: list of ints, describing a permutation of length 
+                     permutation_length.  
+                     
     Returns:
-        X (arr): matrix containing LCS paths for strings A and B."""
-    lenA, lenB = len(A), len(B)
+        graph: dict, describing directions from number to number (nodes)
+               that can be taken to get an ascending path through the
+               permutation as {parent node (int) : [child nodes (int], ...}.
+    """            
+    graph = {}
+    for value in permutation:
+        graph[value] = []
+        
+    for parent in graph.keys():
+        for value in permutation:
+            if permutation.index(value) > permutation.index(parent) \
+            and value > parent:
+                graph[parent].append(value)
+                
+    return graph
 
-    # Create matrix of zeros with dimensions lenA (col), lenB (row):
-    X = [[0 for i in range(lenA + 1)] for j in range(lenB + 1)]
-    # lenA/lenB + 1 is for inserting a zero column and row!
-
-    # Populate X with scores for calculating LCS:
-    for i in range(lenA):
-        for j in range(lenB):
-            if A[i] == B[j]:
-                # +1 if two nucleotides are the same (diagonal):
-                X[j + 1][i + 1] = X[j][i] + 1
-            else:
-                # If not the same, get highest value from top/left:
-                X[j + 1][i + 1] = max(X[j + 1][i], X[j][i + 1])
-
-    return X
-
-def backtrack_lcs(matrix, A, B, i, j):
-    """Reads out all routes (LCSs) from LCS matrix.
-
-    Args:
-        matrix (list of lists): containing LCSs.
-        A (str): string A.
-        B (str): string B.
-        i (int): location in A.
-        j (int): location in B.
-
+def longest_path(graph):
+    """Finds longest ascending path in graph.
+    
+    Arguments:
+        graph: dict, describing directions from number to number (nodes)
+               that can be taken to get an ascending path through the
+               permutation as {parent node (int) : [child nodes (int], ...}.
+               
     Returns:
-        lcs (str): longest common substring from matrix."""
-    # Return LCS when begin of one of the strings is reached:
-    if i == 0 or j == 0:
-        return ""
+    
+    """
+    # keep some kind of queue when walking through graph, when node has
+    # no more neighbours and unvisited nodes in queue is also empty then
+    # return path ...
+    paths = []
 
-    # If equal return char:
-    if A[i - 1] ==  B[j - 1]:
-        return backtrack_lcs(matrix, A, B, i - 1, j - 1) + A[i - 1]
-
-    # Choose left over top if larger, otherwise (equal) choose top:
-    if matrix[j][i - 1] > matrix[j - 1][i]:
-        return backtrack_lcs(matrix, A, B, i - 1, j)
-
-    return backtrack_lcs(matrix, A, B, i, j - 1)
-	
-	
-# main
+# Main
 def main():
+    
+    # Define name Rosalind input file
+    input_filename = argv[1]
 	
-	# step 1: parse positive integer and permutation from input file
-	n, perm = parse_input(argv[1])
-	perm = "".join(list(map(str, perm)))
-	
-	# step 2:
-	order = "".join(list(map(str, list(range(1, n + 1)))))
-	
-	for count in [order, order[::-1]]:
-		lcs = compute_lcs(perm, count)
-		seq = backtrack_lcs(lcs, perm, count, len(perm), len(count))
-		print(" ".join(list(map(str, [char for char in seq]))))
-	
+	# Step 1: parse permutation length and permutation from input file
+    permutation_length, permutation = parse_input(input_filename)
+
+	# Step 2: create graph from the permutaion for ascending routes
+    graph = create_graph(permutation)
+    
+    # Step 3: find longest ascending path in graph
+    path = longest_path(graph)
+    
+    # Step 4: print longest ascending path in permutation to stdout
+    print(path)
+    
 if __name__ == "__main__":
 	main()
