@@ -41,7 +41,7 @@ def parse_input(filename):
     return n, m, array_n, array_m
 
 def merge_sorted_arrays(array_n, array_m, merged=[]):
-    """Returns a sorted array constructed from two sorted arrays.
+    """Returns a sorted array constructed from two arrays.
 
     Arguments:
     array_n (list): list with length n containing sorted integers.
