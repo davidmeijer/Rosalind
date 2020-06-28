@@ -1,102 +1,44 @@
 #!/usr/bin/env python3
 """
-Author:         David Meijer
-Description:    Script for solving Rosalind exercise Longest Increasing 
-                Subsequence (lgis).
+Author:             David Meijer
+Description:        Script for solving Rosalind exercise Longest Increasing
+                    Subsequence (lgis).
 
-Usage:          python3 lgis.py <Rosalind input file>
+Usage:              python3 lgis.py <input.txt>
 
 Arguments:
-    <Rosalind input file>   .txt input file containing a single positive 
-                            integer on the first line and a collection of
-                            space separated positive integers on the second 
-                            line.
+    <input.txt>     Rosalind specific input file.
 """
-# Import statements
 from sys import argv
 
-# Functions
-def parse_input(filename):
-	"""Parses positive integer and permutation from input file.
-	
-    Arguments;
-        filename: str, file containing input integer and permutation.
-        
-    Returns:
-        permutation_length: int, length of the permutation.
-        permutation: list of ints, describing a permutation of length 
-                     permutation_length.
-	
-	Input file consists of two lines: on the first line there is a 
-	single integer and on the second line there is a permutation, 
-	several numbers seperated each by a space.
-	"""
-	with open(filename, "r") as file_open:
-		permutation_length = int(file_open.readline().strip())
-		permutation = list(map(int, file_open.readline().strip().split()))
-		
-	return permutation_length, permutation
-    
-def create_graph(permutation):
-    """Returns directed graph from permutation.
-    
-    Arguments:
-        permutation_length: int, length of the permutation.
-        permutation: list of ints, describing a permutation of length 
-                     permutation_length.  
-                     
-    Returns:
-        graph: dict, describing directions from number to number (nodes)
-               that can be taken to get an ascending path through the
-               permutation as {parent node (int) : [child nodes (int], ...}.
-    """            
-    graph = {}
-    for value in permutation:
-        graph[value] = []
-        
-    for parent in graph.keys():
-        for value in permutation:
-            if permutation.index(value) > permutation.index(parent) \
-            and value > parent:
-                graph[parent].append(value)
-                
-    return graph
+def parse_input(fn):
+    """Parses permutation and permutation length from input file."""
+    with open(fn, "r") as fo:
+        n = int(fo.readline().strip())
+        iter = list(map(int, fo.readline().strip().split()))
+    return n, iter
 
-def longest_path(graph):
-    """Finds longest ascending path in graph.
-    
-    Arguments:
-        graph: dict, describing directions from number to number (nodes)
-               that can be taken to get an ascending path through the
-               permutation as {parent node (int) : [child nodes (int], ...}.
-               
-    Returns:
-    
-    """
-    # keep some kind of queue when walking through graph, when node has
-    # no more neighbours and unvisited nodes in queue is also empty then
-    # return path ...
-    paths = []
-    
-    
+def get_lis(n, iter):
+    """Returns longest increasing substring from iterable of integers."""
+    subs = [[] for _ in range(n)]
+    subs[0].append(iter[0])
+    for idx_a in range(1, n):
+        for idx_b in range(idx_a):
+            if iter[idx_a] > iter[idx_b] \
+            and len(subs[idx_a]) < (len(subs[idx_b]) + 1):
+                subs[idx_a] = subs[idx_b].copy()
+        subs[idx_a].append(iter[idx_a])
+    return max(subs, key = lambda sub: len(sub))
 
-# Main
+def print_lis(lis):
+    """Prints lis in nice format to stdout."""
+    print(" ".join(list(map(str, lis))))
+
 def main():
-    
-    # Define name Rosalind input file
-    input_filename = argv[1]
-	
-	# Step 1: parse permutation length and permutation from input file
-    permutation_length, permutation = parse_input(input_filename)
+    """Driver code."""
+    n, iter = parse_input(argv[1])
+    print_lis(get_lis(n, iter))
+    print_lis(get_lis(n, iter[::-1])[::-1])
 
-	# Step 2: create graph from the permutaion for ascending routes
-    graph = create_graph(permutation)
-    
-    # Step 3: find longest ascending path in graph
-    path = longest_path(graph)
-    
-    # Step 4: print longest ascending path in permutation to stdout
-    print(path)
-    
 if __name__ == "__main__":
 	main()
